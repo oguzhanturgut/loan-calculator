@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Platform,
   Keyboard,
+  Alert,
   TouchableNativeFeedback,
 } from 'react-native';
 
@@ -23,6 +24,43 @@ const LoanScreen = props => {
   const [deposit, setDeposit] = useState(0);
   const [term, setTerm] = useState(1);
 
+  const hasValidFormData = () => {
+    return [vehiclePrice, deposit].every(item => item > 0);
+  };
+
+  const resetInputHandler = () => {
+    setDeposit(0);
+  };
+
+  const onSubmitHandler = () => {
+    const depositAmount = parseInt(deposit);
+    const vehiclePriceAmount = parseInt(vehiclePrice);
+    if (
+      isNaN(depositAmount) ||
+      depositAmount <= 0 ||
+      depositAmount > vehiclePriceAmount ||
+      depositAmount < (vehiclePriceAmount * 15) / 100
+    ) {
+      Alert.alert(
+        'Invalid deposit amount',
+        'Deposit should at least 15% of vehicle price.',
+        [
+          {
+            text: 'Okay',
+            style: 'destructive',
+            onPress: resetInputHandler,
+          },
+        ],
+      );
+      return;
+    }
+    props.navigation.navigate('Quote', {
+      vehiclePrice,
+      deposit,
+      deliveryDate,
+      term,
+    });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.elementsContainer}>
@@ -50,11 +88,10 @@ const LoanScreen = props => {
           <Text style={styles.label}>Delivery Date</Text>
           <TouchableNativeFeedback
             onPress={() => {
-              Keyboard.dismiss();
               setShow(true);
             }}>
             <Text style={{...styles.textInput, textAlignVertical: 'center'}}>
-              {moment(deliveryDate).format('DD/MM/yyyy')}
+              {moment(deliveryDate).format('DD/MM/YYYY')}
             </Text>
           </TouchableNativeFeedback>
           {show && (
@@ -74,6 +111,7 @@ const LoanScreen = props => {
           <Picker
             selectedValue={term}
             style={styles.picker}
+            mode={'dropdown'}
             onValueChange={value => {
               setTerm(value);
             }}>
@@ -84,16 +122,9 @@ const LoanScreen = props => {
         </View>
       </View>
       <TouchableOpacity
-        style={[styles.button, /*disabled  && */ styles.buttonDisabled]}
-        onPress={() => {
-          props.navigation.navigate('Quote', {
-            vehiclePrice,
-            deposit,
-            deliveryDate,
-            term,
-          });
-        }}
-        disabled={false}>
+        style={[styles.button, !hasValidFormData() && styles.buttonDisabled]}
+        onPress={onSubmitHandler}
+        disabled={!hasValidFormData()}>
         <Text style={styles.buttonText}>Calculate</Text>
       </TouchableOpacity>
     </View>
@@ -110,13 +141,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#3F4EA5',
   },
-  // screenTitle: {
-  //   fontSize: 35,
-  //   textAlign: 'center',
-  //   margin: 10,
-  //   color: '#FFF',
-  //   fontFamily: 'roboto-regular',
-  // },
   inputWrapper: {
     marginBottom: 40,
     paddingHorizontal: 10,
@@ -125,8 +149,6 @@ const styles = StyleSheet.create({
   elementsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    // alignItems: 'center',
-    // width: '100%',
   },
   textInput: {
     height: 40,
@@ -145,9 +167,10 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   picker: {
-    height: 50,
+    height: 40,
     width: 100,
     color: '#FFF',
+    fontSize: 30,
   },
   button: {
     width: '60%',

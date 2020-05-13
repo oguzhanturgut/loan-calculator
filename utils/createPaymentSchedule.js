@@ -11,7 +11,6 @@ export default (vehiclePrice, deposit, deliveryDate, term) => {
   const monthlyPayment = calculateMonthlyPayment(vehiclePrice, deposit, term)
     .monthlyPayment;
   const termMonths = term * 12;
-  // TODO fix problem with adding to fees with monthly payments
   const result = {
     vehiclePrice: vehiclePrice,
     deposit: deposit,
