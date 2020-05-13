@@ -11,14 +11,35 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import LoanScreen from './screens/LoanScreen';
+import QuoteScreen from './screens/QuoteScreen';
+import Colors from './constants/Colors';
 
 const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name={'Loan Calculator'} component={LoanScreen} />
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: Colors.primary,
+            elevation: 3,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontFamily: 'roboto-regular',
+          },
+        }}>
+        <Stack.Screen
+          name={'Loan'}
+          component={LoanScreen}
+          options={{title: 'Loan Calculator'}}
+        />
+        <Stack.Screen
+          name={'Quote'}
+          component={QuoteScreen}
+          options={{title: 'Special Quote'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

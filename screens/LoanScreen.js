@@ -91,13 +91,17 @@ const LoanScreen = props => {
       </View>
       <TouchableOpacity
         style={[styles.button, /*disabled  && */ styles.buttonDisabled]}
-        onPress={() => {}}
+        onPress={() => {
+          props.navigation.navigate('Quote');
+        }}
         disabled={false}>
         <Text style={styles.buttonText}>Calculate</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
+// TODO add validation to the form
 
 const styles = StyleSheet.create({
   container: {
@@ -107,13 +111,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#3F4EA5',
   },
-  screenTitle: {
-    fontSize: 35,
-    textAlign: 'center',
-    margin: 10,
-    color: '#FFF',
-    fontFamily: 'roboto-regular',
-  },
+  // screenTitle: {
+  //   fontSize: 35,
+  //   textAlign: 'center',
+  //   margin: 10,
+  //   color: '#FFF',
+  //   fontFamily: 'roboto-regular',
+  // },
   inputWrapper: {
     marginBottom: 40,
     paddingHorizontal: 10,
