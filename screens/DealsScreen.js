@@ -4,10 +4,10 @@ import {
   StyleSheet,
   Text,
   ImageBackground,
-  ScrollView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
-import Colors from '../constants/Colors';
+import useFetch from '../api/useFetch';
 
 const CarItem = props => {
   return (
@@ -32,44 +32,38 @@ const CarItem = props => {
 
 const DealsScreen = ({navigate, route}) => {
   const {monthlyPayment} = route.params;
-  const [searchResults, setSearchResults] = useState([]);
 
-  useEffect(() => {
-    (async function() {
-      try {
-        const response = await fetch(
-          `https://www.arnoldclark.com/used-cars/search.json?payment_type=monthly&min_price=${monthlyPayment}`,
-        );
-        const data = await response.json();
-        setSearchResults(
-          data.searchResults.filter(car => car.imageCount > 0).slice(0, 6),
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, [monthlyPayment]);
+  const [searchResults, loading] = useFetch(monthlyPayment);
+
   return (
     <View style={styles.screen}>
-      <FlatList
-        data={searchResults}
-        keyExtractor={item => item.stockReference}
-        renderItem={({item}) => (
-          <CarItem
-            image={item.thumbnails[0]}
-            title={item.title.name}
-            cashPrice={item.salesInfo.pricing.cashPrice}
-            monthlyPayment={item.salesInfo.pricing.monthlyPayment}
-            deposit={item.salesInfo.pricing.deposit}
-          />
-        )}
-      />
+      {loading ? (
+        <ActivityIndicator size={'large'} color={'#0000ff'} />
+      ) : (
+        <FlatList
+          data={searchResults}
+          keyExtractor={item => item.stockReference}
+          renderItem={({item}) => (
+            <CarItem
+              image={item.thumbnails[0]}
+              title={item.title.name}
+              cashPrice={item.salesInfo.pricing.cashPrice}
+              monthlyPayment={item.salesInfo.pricing.monthlyPayment}
+              deposit={item.salesInfo.pricing.deposit}
+            />
+          )}
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {flex: 1},
+  screen: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   carItem: {
     height: 200,
     width: '100%',
@@ -94,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '15%',
-    backgroundColor: Colors.primary,
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   titleContainer: {
     backgroundColor: 'rgba(0,0,0,0.5)',
