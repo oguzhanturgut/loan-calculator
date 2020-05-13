@@ -11,45 +11,45 @@ export default (vehiclePrice, deposit, deliveryDate, term) => {
   const monthlyPayment = calculateMonthlyPayment(vehiclePrice, deposit, term)
     .monthlyPayment;
   const termMonths = term * 12;
-
+  // TODO fix problem with adding to fees with monthly payments
   const result = {
-    vehiclePrice,
-    deposit,
+    vehiclePrice: Consts.currency + vehiclePrice,
+    deposit: Consts.currency + deposit,
     deliveryDate: moment(deliveryDate).format('DD/MM/yyyy'),
     termMonths,
-    totalAmountPayable,
-    monthlyPayment,
-    arrangementFee: Consts.arrangementFee,
-    completionFee: Consts.completionFee,
+    totalAmountPayable: Consts.currency + totalAmountPayable.toFixed(2),
+    monthlyPayment: Consts.currency + monthlyPayment.toFixed(2),
+    arrangementFee: Consts.currency + Consts.arrangementFee,
+    completionFee: Consts.currency + Consts.completionFee,
     schedule: [],
   };
   // first payment
   result.schedule.push({
     dueDate: moment(deliveryDate)
-      .endOf('month')
-      .add(1, 'D')
+      .add(1, 'M')
+      .startOf('month')
       .format('DD/MM/yyy'),
-    amount: monthlyPayment + Consts.arrangementFee,
+    amount:
+      Consts.currency + (monthlyPayment + Consts.arrangementFee).toFixed(2),
   });
 
   for (let i = 1; i < termMonths - 1; i++) {
     result.schedule.push({
       dueDate: moment(deliveryDate)
-        .add(i, 'M')
-        .endOf('month')
-        .add(1, 'D')
+        .add(i + 1, 'M')
+        .startOf('month')
         .format('DD/MM/yyy'),
-      amount: monthlyPayment,
+      amount: Consts.currency + monthlyPayment.toFixed(2),
     });
   }
   // last payment
   result.schedule.push({
     dueDate: moment(deliveryDate)
       .add(termMonths, 'M')
-      .endOf('month')
-      .add(1, 'D')
+      .startOf('month')
       .format('DD/MM/yyy'),
-    amount: monthlyPayment + Consts.arrangementFee,
+    amount:
+      Consts.currency + (monthlyPayment + Consts.completionFee).toFixed(2),
   });
 
   return result;

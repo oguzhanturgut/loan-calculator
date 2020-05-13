@@ -25,7 +25,6 @@ const LoanScreen = props => {
 
   return (
     <View style={styles.container}>
-      {/*<Text style={styles.screenTitle}>Loan Calculator</Text>*/}
       <View style={styles.elementsContainer}>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Vehicle Price</Text>
