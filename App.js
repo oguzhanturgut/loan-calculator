@@ -13,6 +13,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoanScreen from './screens/LoanScreen';
 import QuoteScreen from './screens/QuoteScreen';
 import Colors from './constants/Colors';
+import DealsScreen from './screens/DealsScreen';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,11 @@ const App: () => React$Node = () => {
           name={'Quote'}
           component={QuoteScreen}
           options={{title: 'Special Quote'}}
+        />
+        <Stack.Screen
+          name={'Deals'}
+          component={DealsScreen}
+          options={{title: 'Car Deals'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

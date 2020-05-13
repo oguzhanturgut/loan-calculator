@@ -1,33 +1,9 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Text, FlatList, TouchableOpacity} from 'react-native';
 import createPaymentSchedule from '../utils/createPaymentSchedule';
 import Colors from '../constants/Colors';
-// TODO render payment schedule
-
-const ScheduleRow = ({dueDate, amount}) => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        margin: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#FFF',
-      }}>
-      <Text style={styles.cellHeader}>{dueDate}</Text>
-      <Text style={styles.cellHeader}>{amount}</Text>
-    </View>
-  );
-};
+import ScheduleRow from '../components/ScheduleRow';
+import Consts from '../constants/Consts';
 
 const QuoteScreen = ({navigation, route}) => {
   const {vehiclePrice, deposit, deliveryDate, term} = route.params;
@@ -40,47 +16,63 @@ const QuoteScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.screen}>
-      <View style={{flex: 1}}>
+      <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.cell}>
             <Text style={styles.cellHeader}>Vehicle Price</Text>
-            <Text style={styles.cellText}>{payment.vehiclePrice}</Text>
+            <Text style={styles.cellText}>
+              {Consts.currency + payment.vehiclePrice}
+            </Text>
           </View>
 
           <View style={styles.cell}>
             <Text style={styles.cellHeader}>Deposit</Text>
-            <Text style={styles.cellText}>{payment.deposit}</Text>
+            <Text style={styles.cellText}>
+              {Consts.currency + payment.deposit}
+            </Text>
           </View>
         </View>
 
         <View style={styles.row}>
           <View style={styles.cell}>
             <Text style={styles.cellHeader}>Total Amount Payable</Text>
-            <Text style={styles.cellText}>{payment.totalAmountPayable}</Text>
+            <Text style={styles.cellText}>
+              {Consts.currency + payment.totalAmountPayable}
+            </Text>
           </View>
 
           <View style={styles.cell}>
             <Text style={styles.cellHeader}>Monthly Payment</Text>
-            <Text style={styles.cellText}>{payment.monthlyPayment}</Text>
+            <Text style={styles.cellText}>
+              {Consts.currency + payment.monthlyPayment}
+            </Text>
           </View>
         </View>
 
         <View style={styles.row}>
           <View style={styles.cell}>
             <Text style={styles.cellHeader}>Arrangement Fee</Text>
-            <Text style={styles.cellText}>{payment.arrangementFee}</Text>
+            <Text style={styles.cellText}>
+              {Consts.currency + payment.arrangementFee}
+            </Text>
           </View>
 
           <View style={styles.cell}>
             <Text style={styles.cellHeader}>Completion Fee</Text>
-            <Text style={styles.cellText}>{payment.completionFee}</Text>
+            <Text style={styles.cellText}>
+              {Consts.currency + payment.completionFee}
+            </Text>
           </View>
         </View>
       </View>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {}}
+        onPress={() => {
+          navigation.navigate('Deals', {
+            monthlyPayment: payment.monthlyPayment,
+          });
+        }}
         disabled={false}>
         <Text style={styles.buttonText}>See Deals</Text>
       </TouchableOpacity>
@@ -90,7 +82,6 @@ const QuoteScreen = ({navigation, route}) => {
         data={payment.schedule}
         keyExtractor={item => item.dueDate}
         renderItem={({item}) => (
-          // <Text>{item.dueDate}</Text>
           <ScheduleRow dueDate={item.dueDate} amount={item.amount} />
         )}
       />
@@ -107,6 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  container: {flex: 1, marginBottom: 10},
   row: {
     flex: 1,
     flexDirection: 'row',
