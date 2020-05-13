@@ -4,6 +4,7 @@ import createPaymentSchedule from '../utils/createPaymentSchedule';
 import Colors from '../constants/Colors';
 import ScheduleRow from '../components/ScheduleRow';
 import Consts from '../constants/Consts';
+import CustomButtom from '../components/CustomButtom';
 
 const QuoteScreen = ({navigation, route}) => {
   const {vehiclePrice, deposit, deliveryDate, term} = route.params;
@@ -66,16 +67,14 @@ const QuoteScreen = ({navigation, route}) => {
         </View>
       </View>
 
-      <TouchableOpacity
-        style={styles.button}
+      <CustomButtom
+        buttonText={'See Deals'}
         onPress={() => {
           navigation.navigate('Deals', {
             monthlyPayment: payment.monthlyPayment,
           });
         }}
-        disabled={false}>
-        <Text style={styles.buttonText}>See Deals</Text>
-      </TouchableOpacity>
+      />
 
       <FlatList
         style={{flex: 1, width: '100%'}}

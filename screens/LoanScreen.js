@@ -15,6 +15,7 @@ import {Picker} from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import moment from 'moment';
+import CustomButtom from '../components/CustomButtom';
 
 const LoanScreen = props => {
   const [deliveryDate, setDeliveryDate] = useState(new Date(Date.now()));
@@ -121,17 +122,15 @@ const LoanScreen = props => {
           </Picker>
         </View>
       </View>
-      <TouchableOpacity
-        style={[styles.button, !hasValidFormData() && styles.buttonDisabled]}
+      <CustomButtom
+        style={!hasValidFormData() && styles.buttonDisabled}
+        buttonText={'Calculate'}
+        disabled={!hasValidFormData()}
         onPress={onSubmitHandler}
-        disabled={!hasValidFormData()}>
-        <Text style={styles.buttonText}>Calculate</Text>
-      </TouchableOpacity>
+      />
     </View>
   );
 };
-
-// TODO add validation to the form
 
 const styles = StyleSheet.create({
   container: {
@@ -171,24 +170,6 @@ const styles = StyleSheet.create({
     width: 100,
     color: '#FFF',
     fontSize: 30,
-  },
-  button: {
-    width: '60%',
-    backgroundColor: '#FD6592',
-    borderRadius: 3,
-    height: 40,
-    marginHorizontal: 10,
-    marginBottom: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  buttonDisabled: {
-    opacity: 0.5,
   },
 });
 
