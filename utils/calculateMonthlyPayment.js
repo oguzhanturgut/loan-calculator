@@ -1,11 +1,13 @@
 import Consts from '../constants/Consts';
 
-export default (vehiclePrice, deposit, term, interest = Consts.interest) => {
+export default (vehiclePrice, deposit, term) => {
   const monthsInYear = 12;
-  const monthlyInterest = (interest / monthsInYear).toFixed(2);
+  const monthlyInterest = (Consts.interest / monthsInYear).toFixed(2);
   const creditAmount = vehiclePrice - deposit;
   const months = term * monthsInYear;
-  const monthlyPayment =
+  const creditPayback =
     creditAmount + (creditAmount * monthlyInterest * months) / 100;
-  return monthlyPayment;
+  const monthlyPayment = creditPayback / monthsInYear;
+  const totalAmountPayable = creditPayback + deposit;
+  return {monthlyPayment, totalAmountPayable};
 };

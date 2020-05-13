@@ -13,12 +13,7 @@ import {
 import {Picker} from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const formatDate = date => {
-  const dd = String(date.getDate()).padStart(2, '0');
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const yyyy = date.getFullYear();
-  return dd + '/' + mm + '/' + yyyy;
-};
+import moment from 'moment';
 
 const LoanScreen = props => {
   const [deliveryDate, setDeliveryDate] = useState(new Date(Date.now()));
@@ -60,7 +55,7 @@ const LoanScreen = props => {
               setShow(true);
             }}>
             <Text style={{...styles.textInput, textAlignVertical: 'center'}}>
-              {formatDate(deliveryDate)}
+              {moment(deliveryDate).format('DD/MM/yyyy')}
             </Text>
           </TouchableNativeFeedback>
           {show && (
@@ -92,7 +87,12 @@ const LoanScreen = props => {
       <TouchableOpacity
         style={[styles.button, /*disabled  && */ styles.buttonDisabled]}
         onPress={() => {
-          props.navigation.navigate('Quote');
+          props.navigation.navigate('Quote', {
+            vehiclePrice,
+            deposit,
+            deliveryDate,
+            term,
+          });
         }}
         disabled={false}>
         <Text style={styles.buttonText}>Calculate</Text>
