@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Platform,
   Keyboard,
+  TouchableNativeFeedback,
 } from 'react-native';
 
 import {Picker} from '@react-native-community/picker';
@@ -20,42 +21,56 @@ const formatDate = date => {
 };
 
 const LoanScreen = props => {
-  const [date, setDate] = useState(new Date(Date.now()));
+  const [deliveryDate, setDeliveryDate] = useState(new Date(Date.now()));
   const [show, setShow] = useState(false);
+
+  const [vehiclePrice, setVehiclePrice] = useState(0);
+  const [deposit, setDeposit] = useState(0);
+  const [term, setTerm] = useState(1);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.screenTitle}>Loan Calculator</Text>
+      {/*<Text style={styles.screenTitle}>Loan Calculator</Text>*/}
       <View style={styles.elementsContainer}>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Vehicle Price</Text>
-          <TextInput style={styles.textInput} />
+          <TextInput
+            style={styles.textInput}
+            value={vehiclePrice}
+            onChangeText={price => setVehiclePrice(price)}
+            keyboardType="number-pad"
+          />
         </View>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Deposit Amount</Text>
-          <TextInput style={styles.textInput} />
+          <TextInput
+            style={styles.textInput}
+            value={deposit}
+            onChangeText={deposit => setDeposit(deposit)}
+            keyboardType="number-pad"
+          />
         </View>
       </View>
       <View style={styles.elementsContainer}>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Delivery Date</Text>
-          <TouchableOpacity
+          <TouchableNativeFeedback
             onPress={() => {
               Keyboard.dismiss();
               setShow(true);
             }}>
-            <Text style={styles.date}>{formatDate(date)}</Text>
-            {/*<TextInput style={styles.textInput} value={formatDate(date)} />*/}
-          </TouchableOpacity>
-
+            <Text style={{...styles.textInput, textAlignVertical: 'center'}}>
+              {formatDate(deliveryDate)}
+            </Text>
+          </TouchableNativeFeedback>
           {show && (
             <DateTimePicker
               value={new Date(Date.now())}
               minimumDate={new Date(Date.now())}
               onChange={(e, selectedDate) => {
-                const currentDate = selectedDate || date;
+                const currentDate = selectedDate || deliveryDate;
                 setShow(Platform.OS === 'ios');
-                setDate(currentDate);
+                setDeliveryDate(currentDate);
               }}
             />
           )}
@@ -63,9 +78,11 @@ const LoanScreen = props => {
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Term (years)</Text>
           <Picker
-            selectedValue={1}
+            selectedValue={term}
             style={styles.picker}
-            onValueChange={() => {}}>
+            onValueChange={value => {
+              setTerm(value);
+            }}>
             <Picker.Item label="1" value="1" />
             <Picker.Item label="2" value="2" />
             <Picker.Item label="3" value="3" />
@@ -121,12 +138,6 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'roboto-regular',
     fontSize: 16,
-    marginBottom: 5,
-    color: '#FFF',
-  },
-  date: {
-    fontFamily: 'roboto-regular',
-    fontSize: 18,
     marginBottom: 5,
     color: '#FFF',
   },
