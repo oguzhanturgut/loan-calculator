@@ -1,6 +1,7 @@
 import React from 'react';
-import {ImageBackground, Text, View, StyleSheet} from 'react-native';
+import {ImageBackground, View, StyleSheet} from 'react-native';
 import Consts from '../constants/Consts';
+import Text from '../components/CustomText';
 
 const CarItem = props => {
   return (
@@ -59,14 +60,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   title: {
-    fontFamily: 'roboto-regular',
     fontSize: 20,
     color: 'white',
     textAlign: 'center',
   },
   detailText: {
     color: '#FFF',
-    fontFamily: 'roboto-regular',
   },
 });
 

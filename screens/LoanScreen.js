@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   Platform,
   Alert,
   TouchableNativeFeedback,
 } from 'react-native';
+import Text from '../components/CustomText';
 
 import {Picker} from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     color: '#3F4EA5',
   },
   label: {
-    fontFamily: 'roboto-regular',
     fontSize: 16,
     marginBottom: 5,
     color: '#FFF',

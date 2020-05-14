@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import Text from '../components/CustomText';
 
 const ScheduleRow = ({dueDate, amount}) => {
   return (
@@ -20,7 +21,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#FFF',
   },
   text: {
-    fontFamily: 'roboto-regular',
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',

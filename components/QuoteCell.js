@@ -1,5 +1,7 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import Text from '../components/CustomText';
+
 import Consts from '../constants/Consts';
 import Colors from '../constants/Colors';
 
@@ -22,7 +24,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   cellHeader: {
-    fontFamily: 'roboto-regular',
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
@@ -31,7 +32,6 @@ const styles = StyleSheet.create({
   },
   cellText: {
     textAlign: 'center',
-    fontFamily: 'roboto-regular',
     fontSize: 16,
     color: '#FFF',
   },
