@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, FlatList} from 'react-native';
 import createPaymentSchedule from '../utils/createPaymentSchedule';
 import Colors from '../constants/Colors';
 import ScheduleRow from '../components/ScheduleRow';
-import Consts from '../constants/Consts';
-import CustomButtom from '../components/CustomButtom';
+import CustomButton from '../components/CustomButton';
+import QuoteCell from '../components/QuoteCell';
+import QuoteRow from '../components/QuoteRow';
 
 const QuoteScreen = ({navigation, route}) => {
   const {vehiclePrice, deposit, deliveryDate, term} = route.params;
@@ -18,56 +19,32 @@ const QuoteScreen = ({navigation, route}) => {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellHeader}>Vehicle Price</Text>
-            <Text style={styles.cellText}>
-              {Consts.currency + payment.vehiclePrice}
-            </Text>
-          </View>
+        <QuoteRow>
+          <QuoteCell header={'Vehicle Price'} amount={payment.vehiclePrice} />
+          <QuoteCell header={'Deposit'} amount={payment.deposit} />
+        </QuoteRow>
 
-          <View style={styles.cell}>
-            <Text style={styles.cellHeader}>Deposit</Text>
-            <Text style={styles.cellText}>
-              {Consts.currency + payment.deposit}
-            </Text>
-          </View>
-        </View>
+        <QuoteRow>
+          <QuoteCell
+            header={'Total Amount Payable'}
+            amount={payment.totalAmountPayable}
+          />
+          <QuoteCell
+            header={'Monthly Payment'}
+            amount={payment.monthlyPayment}
+          />
+        </QuoteRow>
 
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellHeader}>Total Amount Payable</Text>
-            <Text style={styles.cellText}>
-              {Consts.currency + payment.totalAmountPayable}
-            </Text>
-          </View>
-
-          <View style={styles.cell}>
-            <Text style={styles.cellHeader}>Monthly Payment</Text>
-            <Text style={styles.cellText}>
-              {Consts.currency + payment.monthlyPayment}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.cellHeader}>Arrangement Fee</Text>
-            <Text style={styles.cellText}>
-              {Consts.currency + payment.arrangementFee}
-            </Text>
-          </View>
-
-          <View style={styles.cell}>
-            <Text style={styles.cellHeader}>Completion Fee</Text>
-            <Text style={styles.cellText}>
-              {Consts.currency + payment.completionFee}
-            </Text>
-          </View>
-        </View>
+        <QuoteRow>
+          <QuoteCell
+            header={'Arrangement Fee'}
+            amount={payment.arrangementFee}
+          />
+          <QuoteCell header={'Completion Fee'} amount={payment.completionFee} />
+        </QuoteRow>
       </View>
 
-      <CustomButtom
+      <CustomButton
         buttonText={'See Deals'}
         onPress={() => {
           navigation.navigate('Deals', {
@@ -77,7 +54,7 @@ const QuoteScreen = ({navigation, route}) => {
       />
 
       <FlatList
-        style={{flex: 1, width: '100%'}}
+        style={styles.quoteList}
         data={payment.schedule}
         keyExtractor={item => item.dueDate}
         renderItem={({item}) => (
@@ -88,8 +65,6 @@ const QuoteScreen = ({navigation, route}) => {
   );
 };
 
-// TODO make button component
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -98,37 +73,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {flex: 1, marginBottom: 10},
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 20,
-  },
-  cell: {
-    width: '40%',
-    backgroundColor: Colors.primary,
-    opacity: 0.7,
-    elevation: 3,
-    borderWidth: 2,
-    borderRadius: 5,
-    padding: 5,
-    marginHorizontal: 10,
-  },
-  cellHeader: {
-    fontFamily: 'roboto-regular',
-    fontWeight: 'bold',
-    fontSize: 18,
-    textAlign: 'center',
-    marginBottom: 10,
-    color: '#FFF',
-  },
-  cellText: {
-    textAlign: 'center',
-    fontFamily: 'roboto-regular',
-    fontSize: 16,
-    color: '#FFF',
-  },
   button: {
     width: '60%',
     backgroundColor: '#FD6592',
@@ -144,6 +88,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  quoteList: {flex: 1, width: '100%'},
 });
 
 export default QuoteScreen;

@@ -1,12 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   Platform,
-  Keyboard,
   Alert,
   TouchableNativeFeedback,
 } from 'react-native';
@@ -15,14 +13,14 @@ import {Picker} from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import moment from 'moment';
-import CustomButtom from '../components/CustomButtom';
+import CustomButton from '../components/CustomButton';
 
 const LoanScreen = props => {
   const [deliveryDate, setDeliveryDate] = useState(new Date(Date.now()));
   const [show, setShow] = useState(false);
 
-  const [vehiclePrice, setVehiclePrice] = useState(0);
-  const [deposit, setDeposit] = useState(0);
+  const [vehiclePrice, setVehiclePrice] = useState();
+  const [deposit, setDeposit] = useState();
   const [term, setTerm] = useState(1);
 
   const hasValidFormData = () => {
@@ -55,10 +53,11 @@ const LoanScreen = props => {
       );
       return;
     }
+
     props.navigation.navigate('Quote', {
       vehiclePrice,
       deposit,
-      deliveryDate,
+      deliveryDate: moment(deliveryDate).format('YYYY-MM-DD'),
       term,
     });
   };
@@ -122,7 +121,7 @@ const LoanScreen = props => {
           </Picker>
         </View>
       </View>
-      <CustomButtom
+      <CustomButton
         style={!hasValidFormData() && styles.buttonDisabled}
         buttonText={'Calculate'}
         disabled={!hasValidFormData()}
