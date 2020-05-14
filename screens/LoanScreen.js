@@ -14,6 +14,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import moment from 'moment';
 import CustomButton from '../components/CustomButton';
+import Consts from '../constants/Consts';
 
 const LoanScreen = props => {
   const [deliveryDate, setDeliveryDate] = useState(new Date(Date.now()));
@@ -27,27 +28,23 @@ const LoanScreen = props => {
     return [vehiclePrice, deposit].every(item => item > 0);
   };
 
-  const resetInputHandler = () => {
-    setDeposit(0);
-  };
-
   const onSubmitHandler = () => {
-    const depositAmount = parseInt(deposit);
-    const vehiclePriceAmount = parseInt(vehiclePrice);
+    const depositAmount = Number(deposit);
+    const vehiclePriceAmount = Number(vehiclePrice);
     if (
       isNaN(depositAmount) ||
       depositAmount <= 0 ||
       depositAmount > vehiclePriceAmount ||
-      depositAmount < (vehiclePriceAmount * 15) / 100
+      depositAmount < (vehiclePriceAmount * Consts.minDepositRate) / 100
     ) {
       Alert.alert(
         'Invalid deposit amount',
-        'Deposit should at least 15% of vehicle price.',
+        `Deposit should at least ${Consts.minDepositRate}% of vehicle price.`,
         [
           {
             text: 'Okay',
             style: 'destructive',
-            onPress: resetInputHandler,
+            onPress: () => setDeposit(),
           },
         ],
       );
@@ -90,7 +87,7 @@ const LoanScreen = props => {
             onPress={() => {
               setShow(true);
             }}>
-            <Text style={{...styles.textInput, textAlignVertical: 'center'}}>
+            <Text style={[styles.textInput, styles.dateText]}>
               {moment(deliveryDate).format('DD/MM/YYYY')}
             </Text>
           </TouchableNativeFeedback>
@@ -164,6 +161,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: '#FFF',
   },
+  dateText: {textAlignVertical: 'center'},
   picker: {
     height: 40,
     width: 100,

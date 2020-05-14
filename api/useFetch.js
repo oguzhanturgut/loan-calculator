@@ -1,18 +1,24 @@
 import {useState, useEffect} from 'react';
+import Consts from '../constants/Consts';
 
 export default monthlyPayment => {
-  const [searchResults, setSearchResults] = useState([]);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const URI = `https://www.arnoldclark.com/used-cars/search.json?payment_type=monthly&min_price=${monthlyPayment}`;
+  const URI = Consts.API_URL + monthlyPayment;
 
   useEffect(() => {
     (async function() {
       try {
         setLoading(true);
         const response = await fetch(URI);
-        const data = await response.json();
-        setSearchResults(
-          data.searchResults.filter(car => car.imageCount > 0).slice(0, 6),
+        const {searchResults} = await response.json();
+        // Get top 6 car deal those have images
+        setResults(
+          searchResults
+            .filter(car => {
+              return car.imageCount > 0 && car.salesInfo.pricing.monthlyPayment;
+            })
+            .slice(0, 6),
         );
       } catch (e) {
         console.error(e);
@@ -22,5 +28,5 @@ export default monthlyPayment => {
     })();
   }, [URI, monthlyPayment]);
 
-  return [searchResults, loading];
+  return [results, loading];
 };
